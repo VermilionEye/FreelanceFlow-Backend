@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.db.base import Base
+from app.models.base import Base
 
 class TimeEntry(Base):
     __tablename__ = "time_entries"

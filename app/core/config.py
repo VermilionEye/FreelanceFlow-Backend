@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
-    DATABASE_URL: str = "postgresql://user:password@localhost/freelanceflow"
+    DATABASE_URL: str = "postgresql://postgres:123321@localhost/freelanceflow"
     
     class Config:
         env_file = ".env"

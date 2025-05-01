@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
 from app.api.endpoints import auth, users, projects, tasks, time_entries
 
-app = FastAPI(title=settings.PROJECT_NAME)
+app = FastAPI(title="FreelanceFlow API")
 
 # CORS middleware configuration
 app.add_middleware(
@@ -15,11 +14,11 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(auth.router, prefix=settings.API_V1_STR)
-app.include_router(users.router, prefix=settings.API_V1_STR)
-app.include_router(projects.router, prefix=settings.API_V1_STR)
-app.include_router(tasks.router, prefix=settings.API_V1_STR)
-app.include_router(time_entries.router, prefix=settings.API_V1_STR)
+app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
+app.include_router(projects.router, prefix="/api")
+app.include_router(tasks.router, prefix="/api")
+app.include_router(time_entries.router)
 
 @app.get("/")
 async def root():

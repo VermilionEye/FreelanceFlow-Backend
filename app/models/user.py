@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.db.base import Base
+from app.models.base import Base
 
 # Association table for User-Role relationship
 user_role = Table(
