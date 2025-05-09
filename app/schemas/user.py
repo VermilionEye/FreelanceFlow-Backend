@@ -3,7 +3,7 @@ from typing import Optional, List
 from datetime import datetime
 
 class UserBase(BaseModel):
-    username: str
+    username: Optional[str] = None
     email: EmailStr
     first_name: Optional[str] = None
     last_name: Optional[str] = None
@@ -16,12 +16,18 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     password: Optional[str] = None
 
-class User(UserBase):
+class UserInDB(UserBase):
     id: int
     is_active: bool
     registration_date: datetime
-    last_login: Optional[datetime]
+    last_login: Optional[datetime] = None
+    access_token: Optional[str] = None
+    token_expires: Optional[datetime] = None
 
+    class Config:
+        from_attributes = True
+
+class User(UserInDB):
     class Config:
         from_attributes = True
 
@@ -30,4 +36,8 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    username: Optional[str] = None 
+    email: Optional[str] = None
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str 

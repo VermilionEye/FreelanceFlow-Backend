@@ -6,7 +6,22 @@ from app.models.task import Task, TaskStatus
 from app.schemas.task import TaskCreate, Task as TaskSchema, TaskUpdate
 from app.core.dependencies import get_current_active_user
 
-router = APIRouter(prefix="/api/tasks", tags=["tasks"])
+router = APIRouter(prefix="/tasks", tags=["tasks"])
+
+@router.post("", response_model=TaskSchema)
+async def create_task(
+    task_create: TaskCreate,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_active_user)
+):
+    task = Task(
+        **task_create.dict(),
+        user_id=current_user.id
+    )
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+    return task
 
 @router.get("/my-tasks", response_model=List[TaskSchema])
 async def read_my_tasks(
@@ -73,4 +88,21 @@ async def update_task(
     
     db.commit()
     db.refresh(task)
+    return task
+
+@router.delete("/{task_id}", response_model=TaskSchema)
+async def delete_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_active_user)
+):
+    task = db.query(Task).filter(
+        Task.id == task_id,
+        Task.user_id == current_user.id
+    ).first()
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    db.delete(task)
+    db.commit()
     return task 

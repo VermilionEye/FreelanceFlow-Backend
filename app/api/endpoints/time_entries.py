@@ -9,7 +9,7 @@ from app.core.dependencies import get_current_active_user
 
 router = APIRouter(tags=["time-entries"])
 
-@router.post("/api/tasks/{task_id}/time", response_model=TimeEntrySchema)
+@router.post("/tasks/{task_id}/time", response_model=TimeEntrySchema)
 async def create_time_entry(
     task_id: int,
     time_entry: TimeEntryCreate,
@@ -26,7 +26,7 @@ async def create_time_entry(
     db.refresh(db_time_entry)
     return db_time_entry
 
-@router.get("/api/tasks/{task_id}/time", response_model=List[TimeEntrySchema])
+@router.get("/tasks/{task_id}/time", response_model=List[TimeEntrySchema])
 async def read_task_time_entries(
     task_id: int,
     db: Session = Depends(get_db),
@@ -38,7 +38,7 @@ async def read_task_time_entries(
     ).all()
     return time_entries
 
-@router.delete("/api/tasks/{task_id}/time/{time_entry_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/tasks/{task_id}/time/{time_entry_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_time_entry(
     task_id: int,
     time_entry_id: int,
@@ -57,7 +57,7 @@ async def delete_time_entry(
     db.commit()
     return {"ok": True}
 
-@router.get("/api/users/{user_id}/time-statistics")
+@router.get("/users/{user_id}/time-statistics")
 async def get_user_time_statistics(
     user_id: int,
     start_date: datetime = None,

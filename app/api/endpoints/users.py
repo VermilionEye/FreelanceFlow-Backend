@@ -7,7 +7,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate, User as UserSchema, UserUpdate
 from app.core.dependencies import get_current_user, get_current_active_user, get_current_admin_user
 
-router = APIRouter(prefix="/api/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("/me", response_model=UserSchema)
 async def read_user_me(

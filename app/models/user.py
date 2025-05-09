@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy.sql import func
 from app.models.base import Base
 
 # Association table for User-Role relationship
@@ -20,12 +20,15 @@ class User(Base):
     hashed_password = Column(String)
     first_name = Column(String)
     last_name = Column(String)
-    registration_date = Column(DateTime, default=datetime.utcnow)
-    last_login = Column(DateTime)
     is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean, default=False)
+    registration_date = Column(DateTime, default=func.now())
+    last_login = Column(DateTime)
     profile_picture = Column(String, nullable=True)
     hourly_rate = Column(Float, default=0.0)
-    verification_token = Column(String, nullable=True)
+    access_token = Column(String)
+    token_expires = Column(DateTime)
+    verification_token = Column(String)
 
     # Relationships
     roles = relationship("Role", secondary=user_role, back_populates="users")
