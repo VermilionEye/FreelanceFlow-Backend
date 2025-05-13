@@ -13,5 +13,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-print(os.environ.get("DATABASE_URL")) 

@@ -25,7 +25,5 @@ class Project(Base):
     budget = Column(Float)
     total_tasks = Column(Integer, default=0)
     completed_tasks = Column(Integer, default=0)
-
-    # Relationships
     user = relationship("User", back_populates="projects")
     tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan") 

@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/auth/login",
-    auto_error=False  # Делаем необязательным, так как будем брать из БД
+    auto_error=False
 )
 
 async def get_current_user(
@@ -22,8 +22,6 @@ async def get_current_user(
     token: str = Depends(oauth2_scheme)
 ) -> User:
     logger.info("=== Token Validation Process Started ===")
-    
-    # Пытаемся получить email из токена в заголовке, если он есть
     try:
         if token:
             logger.info("Found token in request header")
@@ -37,13 +35,10 @@ async def get_current_user(
     except JWTError as e:
         logger.error(f"Error decoding header token: {str(e)}")
         email = None
-
-    # Ищем пользователя с действующим токеном
     current_time = datetime.utcnow()
     user = db.query(User).filter(
         User.token_expires > current_time
     ).first()
-
     if not user:
         logger.error("No user found with valid token")
         raise HTTPException(
@@ -51,7 +46,6 @@ async def get_current_user(
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
     logger.info(f"Found authenticated user: {user.email}")
     logger.info("=== Token Validation Process Completed ===")
     return user
